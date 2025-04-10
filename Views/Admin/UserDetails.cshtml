@@ -1,0 +1,140 @@
+@model SubdivisionManagement.Models.User
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">User Details</h1>
+        <div>
+            <a href="@Url.Action("EditUser", "Admin", new { id = Model.Id })" class="btn btn-sm btn-info me-2">
+                <i class="fas fa-edit fa-sm text-white-50 me-1"></i> Edit User
+            </a>
+            <a href="@Url.Action("ManageUsers", "Admin")" class="btn btn-sm btn-secondary">
+                <i class="fas fa-arrow-left fa-sm text-white-50 me-1"></i> Back to Users
+            </a>
+        </div>
+    </div>
+
+    <!-- User Details Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">@Model.FirstName @Model.LastName</h6>
+            <span class="badge @GetRoleBadgeClass(Model.Role)">@Model.Role</span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Personal Information</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Full Name:</div>
+                            <div class="col-md-8">@Model.FirstName @Model.LastName</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Email:</div>
+                            <div class="col-md-8">@Model.Email</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Phone:</div>
+                            <div class="col-md-8">@(Model.PhoneNumber ?? "Not provided")</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Status:</div>
+                            <div class="col-md-8">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Property Information</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Address:</div>
+                            <div class="col-md-8">@(Model.Address ?? "Not provided")</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Block/Lot:</div>
+                            <div class="col-md-8">@(Model.BlockLot ?? "Not provided")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h5 class="font-weight-bold">Account Information</h5>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">User ID:</div>
+                            <div class="col-md-8">@Model.Id</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Created:</div>
+                            <div class="col-md-8">@Model.CreatedAt.ToString("MMM dd, yyyy hh:mm tt")</div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 font-weight-bold">Last Login:</div>
+                            <div class="col-md-8">@(Model.LastLogin?.ToString("MMM dd, yyyy hh:mm tt") ?? "Never")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4">
+                <a href="@Url.Action("EditUser", "Admin", new { id = Model.Id })" class="btn btn-info">
+                    <i class="fas fa-edit me-1"></i> Edit User
+                </a>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="fas fa-trash me-1"></i> Delete User
+                </button>
+            </div>
+            
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete @Model.FirstName @Model.LastName?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a href="@Url.Action("DeleteUser", "Admin", new { id = Model.Id })" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetRoleBadgeClass(UserRoleType role)
+    {
+        return role switch
+        {
+            UserRoleType.Admin => "bg-primary",
+            UserRoleType.Homeowner => "bg-success",
+            UserRoleType.Staff => "bg-info",
+            UserRoleType.Tenant => "bg-secondary",
+            _ => "bg-secondary"
+        };
+    }
+} 

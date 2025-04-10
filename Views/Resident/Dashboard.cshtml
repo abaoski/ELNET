@@ -1,0 +1,182 @@
+@model SubdivisionManagement.Models.ViewModels.ResidentDashboardViewModel
+@{
+    ViewData["Title"] = "Resident Dashboard";
+    Layout = "_ResidentLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Resident Dashboard</h1>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Resident Info Card -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Welcome</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.User.FirstName @Model.User.LastName</div>
+                            <div class="mt-2">
+                                <span class="badge bg-success">@Model.UserRole</span>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Card -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Address</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Address</div>
+                            <div class="mt-2 text-gray-600">
+                                Block/Lot: @Model.BlockLot
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-home fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements Card -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Announcements</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalAnnouncements</div>
+                            <div class="mt-2">
+                                <a href="@Url.Action("Announcements", "Resident")" class="btn btn-sm btn-info">View All</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Announcements -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Announcements</h6>
+                    <a href="@Url.Action("Announcements", "Resident")" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentAnnouncements.Any())
+                    {
+                        <div class="list-group">
+                            @foreach (var announcement in Model.RecentAnnouncements)
+                            {
+                                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">@announcement.Title</h5>
+                                        <small>@announcement.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <p class="mb-1">@announcement.Content</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-center">No announcements available.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Quick Links</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <a href="@Url.Action("CommunityEvents", "Resident")" class="btn btn-primary btn-icon-split btn-lg w-100">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-calendar"></i>
+                                </span>
+                                <span class="text">Community Events</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <a href="@Url.Action("PayDues", "Resident")" class="btn btn-success btn-icon-split btn-lg w-100">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-file-invoice"></i>
+                                </span>
+                                <span class="text">Pay Dues</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <a href="@Url.Action("CreateRequest", "Resident")" class="btn btn-info btn-icon-split btn-lg w-100">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </span>
+                                <span class="text">Submit Request</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <a href="@Url.Action("CommunityDirectory", "Resident")" class="btn btn-warning btn-icon-split btn-lg w-100">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-address-book"></i>
+                                </span>
+                                <span class="text">Community Directory</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetRoleBadgeClass(UserRoleType role)
+    {
+        return role switch
+        {
+            UserRoleType.Homeowner => "bg-success",
+            UserRoleType.Tenant => "bg-secondary",
+            _ => "bg-secondary"
+        };
+    }
+    
+    public string GetStatusBadgeClass(RequestStatus status)
+    {
+        return status switch
+        {
+            RequestStatus.Pending => "bg-warning",
+            RequestStatus.Approved => "bg-success",
+            RequestStatus.Rejected => "bg-danger",
+            RequestStatus.Completed => "bg-info",
+            _ => "bg-secondary"
+        };
+    }
+} 

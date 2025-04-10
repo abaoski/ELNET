@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VerdeNest Resident</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E8B57; /* Sea Green */
+            --primary-dark: #1D6E45;
+            --primary-light: #3CB371; /* Medium Sea Green */
+            --secondary: #343A40; /* Dark Gray */
+            --success: #2E8B57; /* Sea Green */
+            --info: #2E8B57; /* Sea Green */
+            --warning: #343A40; /* Dark Gray */
+            --danger: #DC3545;
+            --light: #F8F9FA;
+            --dark: #343A40;
+            --white: #FFFFFF;
+            --gray: #6C757D;
+            --gray-dark: #343A40;
+            --gray-light: #E9ECEF;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #F8F9FA;
+            overflow-x: hidden;
+        }
+        
+        /* Wrapper for the entire page */
+        .wrapper {
+            display: flex;
+            width: 100%;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 10%, var(--primary-dark) 100%);
+            color: white;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* When sidebar is toggled */
+        body.sidebar-toggled .sidebar {
+            margin-left: -250px;
+        }
+        
+        body.sidebar-toggled .content-wrapper {
+            margin-left: 0;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        
+        .sidebar-brand i {
+            font-size: 2rem;
+            transform: rotate(-15deg);
+            color: var(--white);
+        }
+        
+        .sidebar-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            margin: 1rem 0;
+        }
+        
+        .sidebar-heading {
+            padding: 0 1rem;
+            font-weight: 800;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+        }
+        
+        .nav-item .nav-link {
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        
+        .nav-item .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item .nav-link.active {
+            color: white;
+            font-weight: 700;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-item .nav-link i {
+            margin-right: 0.5rem;
+            opacity: 0.8;
+        }
+        
+        /* Content wrapper */
+        .content-wrapper {
+            width: 100%;
+            margin-left: 250px;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Topbar */
+        .topbar {
+            height: 4.375rem;
+            background-color: white;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .topbar .dropdown-menu {
+            min-width: 12rem;
+        }
+        
+        .topbar .dropdown-list {
+            padding: 0;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .topbar .dropdown-list .dropdown-header {
+            background-color: var(--primary);
+            border: 1px solid var(--primary);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            color: white;
+        }
+        
+        .topbar .dropdown-list .dropdown-item {
+            white-space: normal;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-left: 1px solid #e3e6f0;
+            border-right: 1px solid #e3e6f0;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .topbar .dropdown-list .dropdown-item .dropdown-list-image {
+            position: relative;
+            height: 2.5rem;
+            width: 2.5rem;
+        }
+        
+        .topbar .dropdown-list .dropdown-item .dropdown-list-image img {
+            height: 2.5rem;
+            width: 2.5rem;
+        }
+        
+        .topbar .dropdown-list .dropdown-item .dropdown-list-image .status-indicator {
+            background-color: #eaecf4;
+            height: 0.75rem;
+            width: 0.75rem;
+            border-radius: 100%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border: 0.125rem solid white;
+        }
+        
+        .topbar .dropdown-list .dropdown-item .text-truncate {
+            max-width: 10rem;
+        }
+        
+        .topbar .dropdown-list .dropdown-item:active {
+            background-color: #eaecf4;
+            color: #3a3b45;
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+        }
+        
+        .card .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .card-header h6 {
+            color: var(--primary);
+        }
+        
+        .border-left-primary {
+            border-left: 0.25rem solid var(--primary) !important;
+        }
+        
+        .border-left-success {
+            border-left: 0.25rem solid var(--success) !important;
+        }
+        
+        .border-left-info {
+            border-left: 0.25rem solid var(--info) !important;
+        }
+        
+        .border-left-warning {
+            border-left: 0.25rem solid var(--warning) !important;
+        }
+        
+        .border-left-danger {
+            border-left: 0.25rem solid var(--danger) !important;
+        }
+        
+        .border-left-secondary {
+            border-left: 0.25rem solid var(--secondary) !important;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+            border-color: var(--info);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            color: white;
+        }
+        
+        /* Footer */
+        .sticky-footer {
+            padding: 2rem 0;
+            flex-shrink: 0;
+        }
+        
+        /* Media queries */
+        @@media (max-width: 768px) {
+            .sidebar {
+                width: 100px;
+            }
+            
+            .sidebar .sidebar-brand {
+                padding: 1rem 0.5rem;
+            }
+            
+            .sidebar .nav-item .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-item .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .content-wrapper {
+                margin-left: 100px;
+            }
+            
+            body.sidebar-toggled .sidebar {
+                margin-left: -100px;
+            }
+        }
+        
+        /* Update any blue colors to green */
+        .bg-primary {
+            background-color: var(--primary) !important;
+        }
+        
+        .text-primary {
+            color: var(--primary) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .border-left-primary {
+            border-left: 0.25rem solid var(--primary) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <ul class="sidebar navbar-nav">
+            <li class="sidebar-brand">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Dashboard", "Resident")">
+                    <div class="sidebar-brand-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="sidebar-brand-text mx-3">Verde<span class="text-white">Nest</span></div>
+                </a>
+            </li>
+            
+            <div class="sidebar-divider"></div>
+            
+            <div class="sidebar-heading">Main</div>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Dashboard", "Resident")">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Announcements", "Resident")">
+                    <i class="fas fa-fw fa-bullhorn"></i>
+                    <span>Announcements</span>
+                </a>
+            </li>
+            
+            <div class="sidebar-divider"></div>
+            
+            <div class="sidebar-heading">Requests</div>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("CreateRequest", "Resident")">
+                    <i class="fas fa-fw fa-plus"></i>
+                    <span>New Request</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("MyRequests", "Resident")">
+                    <i class="fas fa-fw fa-clipboard-list"></i>
+                    <span>My Requests</span>
+                </a>
+            </li>
+            
+            <div class="sidebar-divider"></div>
+            
+            <div class="sidebar-heading">Community</div>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-calendar"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Directory</span>
+                </a>
+            </li>
+            
+            <!-- Add this to the sidebar navigation section -->
+            <hr class="sidebar-divider d-none d-md-block">
+            
+            <!-- Logout Section -->
+            <div class="sidebar-heading">
+                Account
+            </div>
+            
+            <!-- Nav Item - Logout -->
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Logout", "Account")">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <div class="topbar-divider d-none d-sm-block"></div>
+                    
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Resident</span>
+                            <i class="fas fa-user-circle fa-fw"></i>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-end shadow animated--grow-in"
+                            aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- Main Content -->
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white mt-4">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; VerdeNest 2023</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="@Url.Action("Logout", "Account")">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Toggle the side navigation
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.body.classList.toggle('sidebar-toggled');
+            
+            // Toggle the icon direction
+            const icon = this.querySelector('i');
+            if (document.body.classList.contains('sidebar-toggled')) {
+                icon.classList.remove('fa-angle-left');
+                icon.classList.add('fa-angle-right');
+            } else {
+                icon.classList.remove('fa-angle-right');
+                icon.classList.add('fa-angle-left');
+            }
+        });
+        
+        document.getElementById('sidebarToggleTop').addEventListener('click', function() {
+            document.body.classList.toggle('sidebar-toggled');
+            
+            // Update the toggle button icon as well
+            const sidebarToggleIcon = document.querySelector('#sidebarToggle i');
+            if (document.body.classList.contains('sidebar-toggled')) {
+                sidebarToggleIcon.classList.remove('fa-angle-left');
+                sidebarToggleIcon.classList.add('fa-angle-right');
+            } else {
+                sidebarToggleIcon.classList.remove('fa-angle-right');
+                sidebarToggleIcon.classList.add('fa-angle-left');
+            }
+        });
+        
+        // Set active nav item based on current URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && currentPath.includes(href) && href !== '#') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

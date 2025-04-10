@@ -1,0 +1,61 @@
+@model SubdivisionManagement.Models.Announcement
+@{
+    ViewData["Title"] = "Edit Announcement";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Announcement</h1>
+        <a href="@Url.Action("ManageAnnouncements", "Admin")" class="btn btn-sm btn-secondary">
+            <i class="fas fa-arrow-left fa-sm text-white-50 me-1"></i> Back to Announcements
+        </a>
+    </div>
+
+    <!-- Edit Announcement Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-success">Announcement Information</h6>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <form method="post">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="CreatedById" value="@Model.CreatedById" />
+                <input type="hidden" name="CreatedAt" value="@Model.CreatedAt.ToString("o")" />
+                
+                <div class="form-group mb-3">
+                    <label for="Title" class="form-label">Title</label>
+                    <input type="text" id="Title" name="Title" class="form-control" value="@Model.Title" required />
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="Content" class="form-label">Content</label>
+                    <textarea id="Content" name="Content" class="form-control" rows="10" required>@Model.Content</textarea>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input type="checkbox" id="IsActive" name="IsActive" class="form-check-input" @(Model.IsActive ? "checked" : "") value="true" />
+                    <input type="hidden" name="IsActive" value="false" />
+                    <label for="IsActive" class="form-check-label">Active</label>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Update Announcement</button>
+                    <a href="@Url.Action("ManageAnnouncements", "Admin")" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

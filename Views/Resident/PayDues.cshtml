@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Pay Dues";
+    Layout = "_ResidentLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Pay Dues</h1>
+        <a href="@Url.Action("Dashboard", "Resident")" class="btn btn-sm btn-secondary">
+            <i class="fas fa-arrow-left fa-sm text-white-50 me-1"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Payment Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Payment Options</h6>
+        </div>
+        <div class="card-body">
+            <p>Online payment system is coming soon! In the meantime, please pay your dues at the subdivision office.</p>
+        </div>
+    </div>
+</div> 
